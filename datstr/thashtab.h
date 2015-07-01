@@ -11,6 +11,8 @@
 #include <fstream>
 #include <iostream>
 #include <cstdlib>
+#include <vector>
+
 using namespace std;
 
 #include <constant.h>
@@ -82,6 +84,23 @@ struct TKey
     else
       return false;
   }
+
+  // overload greater than TKEYLENGTH = 3;
+  bool operator> (const TKey & rhs) const
+  {
+    if (key[0] > rhs.key[0])
+      return true;
+    else if (key[0] < rhs.key[0])
+      return false;
+    else if (key[1] > rhs.key[1])
+      return true;
+    else if (key[1] < rhs.key[1])
+      return false;
+    else if (key[2] > rhs.key[2])
+      return true;
+    else
+      return false;
+  }
 };
 
 // KEYLENGTH = 3;
@@ -110,7 +129,6 @@ struct THashEntry
   void * value;                 // value: poiter to record
   THashEntry * pre;              // pre, next: objects with same entry
   THashEntry * next;             // will be stored in a two-way linked-list
-  //int N;                        //The total number of particles that was added 
 
   THashEntry (unsigned * keyi)
   {
@@ -119,7 +137,6 @@ struct THashEntry
         key[i] = keyi[i];
       next = NULL;
       pre = NULL;
-    //N=0;
   }
 
   THashEntry ()
@@ -127,7 +144,6 @@ struct THashEntry
     value = NULL;
     next = NULL;
     pre = NULL;
-    //N = 0;
   }
 
   ~THashEntry ()                 //keep the follower when deleting an object
@@ -150,15 +166,20 @@ protected:
   double minDom[DIMENSION];
   double maxDom[DIMENSION];
 
-  THashEntryPtr *bucket;//The name is misleading, it should be particles, too lazy to change.
+  /*
+   * hash table--->the member in each row of hashtable is a pointer to an vector
+   * In old code, it is THashEntryPtr
+   */
+  vector <THashEntryPtr> *bucket_vec;
+
   int NBUCKETS; //also too lazy to change
   int PRIME;
-//  int ENTRIES;
   int SIZE01;
   int SIZE02;
-  int MAX_ADD;
+
   THashEntryPtr addElement (int entry, unsigned *key);
-  THashEntryPtr searchBucket (THashEntryPtr p, unsigned *key);
+  THashEntryPtr searchBucket (int entry, unsigned *key);
+  THashEntryPtr searchBucket (int entry, unsigned *key, int* index);
 
 public:
   THashTable (int,  int, double *, double *); //constructor that I will use.
@@ -171,7 +192,7 @@ public:
   void remove (unsigned * key);
   int hash (unsigned * key);
 
-  // remove entery
+  // remove particles --> input is TKey
   void remove (TKey k)
   {
     unsigned key[TKEYLENGTH];
@@ -179,7 +200,7 @@ public:
       remove (key);
   }
 
-  //! add entry to the hash-table
+  //! add entry to the hash-table--> input is TKey
   void add (TKey inkey, void * value)
   {
     unsigned key[TKEYLENGTH];
@@ -193,16 +214,26 @@ public:
     return NBUCKETS;
   }
 
-  //! get first entry
-  THashEntryPtr * getbucketptr ()
+//  //! get first entry--->useless
+//  THashEntryPtr * getbucketptr ()
+//  {
+//    return bucket;
+//  }
+
+  //! is i-th bucket empty?
+  bool IsBucketEmpty (int entry)
   {
-    return bucket;
+    return bucket_vec[entry].empty();
   }
 
-  //! get i-th bucket
-  THashEntryPtr getBucket (int entry)
+  /*
+   * get first bucket of i-th row (vector)
+   * what will return is a pointer : THashEntryPtr, which is member in bucket_vec;
+   * vector.begin() is a iterator
+  */
+  THashEntryPtr getBucket(int entry)
   {
-    return bucket[entry];
+    return *(bucket_vec[entry].begin());
   }
 
   //! get min of domain

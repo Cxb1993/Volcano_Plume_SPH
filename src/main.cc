@@ -68,13 +68,18 @@ main(int argc, char **argv)
 
 #ifdef DEBUG
   bool check_part = false;
-  bool check_part_tp =false;
+  bool check_part_tp = false;
   bool check_bypos = false;
   bool find_large_density = false;
   bool search_byphase = false;
   bool find_maxz = false;
   bool vis_flag = false;
-  bool check_neigh =false;
+  bool check_neigh = false;
+  bool debug_hash_tb = true;
+#endif
+
+#ifdef DEBUG
+  debug_thash_tab();
 #endif
 
   // allocate communcation array
