@@ -44,29 +44,6 @@ THashTable::THashTable (int size, int prime, double minR[], double maxR[])
   }
 }
 
-//
-////overloading of constructor
-//THashTable::THashTable (int size, int prime, double minR[], double maxR[], int maxn)
-//{
-//  int i;
-//  NBUCKETS = size;
-//  PRIME = prime;
-//  SIZE02 = NBUCKETS / 10;
-//  SIZE01 = NBUCKETS - SIZE02;
-//  umax = (double) IScale;
-//
-//// allocate table-size, and initialize it
-//  bucket_vec = new vector<THashEntryPtr> [NBUCKETS];
-//  for (i = 0; i < NBUCKETS; i++)
-//  	 bucket_vec[i].push_back(NULL);
-//
-//  for (i = 0; i < DIMENSION; i++)
-//  {
-//    minDom[i] = minR[i];
-//    maxDom[i] = maxR[i];
-//  }
-//}
-
 THashTable::~THashTable ()        //evacuate the table
 {
   for (int i = 0; i < NBUCKETS; i++)
@@ -90,7 +67,7 @@ THashEntryPtr THashTable::searchBucket (int entry, unsigned* keyi)
   int i;
   int size = bucket_vec[entry].size();
 
-  if (size == 0)
+  if (!*(bucket_vec[entry].begin()))
      return NULL;
 
   unsigned* keyarr;
@@ -131,11 +108,11 @@ THashEntryPtr THashTable::searchBucket (int entry, unsigned* keyi)
       {
     	  keyarr = (*(bucket_vec[entry].begin()+i))->key;
     	  if (*keyi != *keyarr)
-    		  break;
+    		  ;
     	  else if (*(keyi+1) != *(keyarr+1))
-    		  break;
+    		  ;
     	  else if (*(keyi+2) != *(keyarr+2))
-    		  break;
+    		  ;
           else //if ((*keyi == *keyarr) && (*(keyi+1) == *(keyarr+1)) && (*(keyi+2) == *(keyarr+2)))
               return bucket_vec[entry][i];
       }
@@ -186,11 +163,11 @@ THashEntryPtr THashTable::searchBucket (int entry, unsigned* keyi)
       {
     	  keyarr = (*(bucket_vec[entry].begin()+i))->key;
     	  if (*keyi != *keyarr)
-    		  break;
+    		  ; //should not use break!
     	  else if (*(keyi+1) != *(keyarr+1))
-    		  break;
+    		  ;
     	  else if (*(keyi+2) != *(keyarr+2))
-    		  break;
+    		  ;
           else //if ((*keyi == *keyarr) && (*(keyi+1) == *(keyarr+1)) && (*(keyi+2) == *(keyarr+2)))
               return bucket_vec[entry][i];
       }
@@ -204,7 +181,7 @@ THashEntryPtr THashTable::searchBucket (int entry, unsigned* keyi, int *index)
   int i;
   int size = bucket_vec[entry].size();
 
-  if (size == 0)
+  if (!*(bucket_vec[entry].begin()))
      return NULL;
 
   unsigned* keyarr;
@@ -246,11 +223,11 @@ THashEntryPtr THashTable::searchBucket (int entry, unsigned* keyi, int *index)
       {
     	  keyarr = (*(bucket_vec[entry].begin()+i))->key;
     	  if (*keyi != *keyarr)
-    		  break;
+    		  ;
     	  else if (*(keyi+1) != *(keyarr+1))
-    		  break;
+    		  ;
     	  else if (*(keyi+2) != *(keyarr+2))
-    		  break;
+    		  ;
           else //if ((*keyi == *keyarr) && (*(keyi+1) == *(keyarr+1)) && (*(keyi+2) == *(keyarr+2)))
           {
               *index = i;
@@ -304,11 +281,11 @@ THashEntryPtr THashTable::searchBucket (int entry, unsigned* keyi, int *index)
       {
     	  keyarr = (*(bucket_vec[entry].begin()+i))->key;
     	  if (*keyi != *keyarr)
-    		  break;
+    		  ;
     	  else if (*(keyi+1) != *(keyarr+1))
-    		  break;
+    		  ;
     	  else if (*(keyi+2) != *(keyarr+2))
-    		  break;
+    		  ;
           else //if ((*keyi == *keyarr) && (*(keyi+1) == *(keyarr+1)) && (*(keyi+2) == *(keyarr+2)))
           {
               *index = i;
@@ -319,10 +296,10 @@ THashEntryPtr THashTable::searchBucket (int entry, unsigned* keyi, int *index)
   return NULL;
 }
 
-
 /*
  * overload addElement
  * if condition can be optimized! --->overlap judgment is not necessary!
+ * Another way to make the code faster is ->key comparison only based on key[2]? --> no, it does not work.
  */
 THashEntryPtr THashTable::addElement (int entry, unsigned keyi[])
 {
@@ -331,9 +308,10 @@ THashEntryPtr THashTable::addElement (int entry, unsigned keyi[])
 
   int size = bucket_vec[entry].size();
 
-  if (size == 0) //if no element has been added at this row yet
+ if (!*(bucket_vec[entry].begin())) //if no element has been added at this row yet
   {
-	  bucket_vec[entry].insert(bucket_vec[entry].begin(), p);
+	  bucket_vec[entry].clear();
+	  bucket_vec[entry].push_back(p);
 	  return p;
   }
   else
@@ -345,7 +323,7 @@ THashEntryPtr THashTable::addElement (int entry, unsigned keyi[])
 	      {
 	    	  keyarr = (*(bucket_vec[entry].begin()+i))->key;
 	    	  if (*keyi > *keyarr)
-	    		  break;
+	    		  ; //pass
 	    	  else if (*keyi < *keyarr)
 	    	  {
 	    		  p->next = *(bucket_vec[entry].begin()+i);
@@ -360,7 +338,7 @@ THashEntryPtr THashTable::addElement (int entry, unsigned keyi[])
 	    		  return p;
 	    	  }
 	    	  else if ((*keyi == *keyarr) && (*(keyi+1) > *(keyarr+1)))
-	    		  break;
+	    		  ;
 	    	  else if ((*keyi == *keyarr) && (*(keyi+1) < *(keyarr+1)))
 	    	  {
 	    		  p->next = *(bucket_vec[entry].begin()+i);
@@ -375,7 +353,7 @@ THashEntryPtr THashTable::addElement (int entry, unsigned keyi[])
 	    		  return p;
 	    	  }
 	    	  else if ((*keyi == *keyarr) && (*(keyi+1) == *(keyarr+1)) && (*(keyi+2) > *(keyarr+2)))
-	    		  break;
+	    		  ;
 	          else //if ((*keyi == *keyarr) && (*(keyi+1) == *(keyarr+1)) && (*(keyi+2) == *(keyarr+2)))
 	          {
 	    		  p->next = *(bucket_vec[entry].begin()+i);
@@ -392,8 +370,8 @@ THashEntryPtr THashTable::addElement (int entry, unsigned keyi[])
 	      }
 
 	      //if keyi larger than maximum key in the vector, put it at the end of the vector
-	      p->pre = *(bucket_vec[entry].end()-1);
-	      (*(bucket_vec[entry].end()-1))->next = p;
+	      p->pre = (bucket_vec[entry][size-1]);
+	      (bucket_vec[entry][size-1])->next = p;
 	      bucket_vec[entry].push_back(p);
 		  return p;
 	  }
@@ -443,7 +421,7 @@ THashEntryPtr THashTable::addElement (int entry, unsigned keyi[])
 	      {
 	    	  keyarr = (*(bucket_vec[entry].begin()+i))->key;
 	    	  if (*keyi > *keyarr)
-	    		  break;
+	    		  ;
 	    	  else if (*keyi < *keyarr)
 	    	  {
 	    		  p->next = *(bucket_vec[entry].begin()+i);
@@ -458,7 +436,7 @@ THashEntryPtr THashTable::addElement (int entry, unsigned keyi[])
 	    		  return p;
 	    	  }
 	    	  else if ((*keyi == *keyarr) && (*(keyi+1) > *(keyarr+1)))
-	    		  break;
+	    		  ;
 	    	  else if ((*keyi == *keyarr) && (*(keyi+1) < *(keyarr+1)))
 	    	  {
 	    		  p->next = *(bucket_vec[entry].begin()+i);
@@ -473,7 +451,7 @@ THashEntryPtr THashTable::addElement (int entry, unsigned keyi[])
 	    		  return p;
 	    	  }
 	    	  else if ((*keyi == *keyarr) && (*(keyi+1) == *(keyarr+1)) && (*(keyi+2) > *(keyarr+2)))
-	    		  break;
+	    		  ;
 	          else //if ((*keyi == *keyarr) && (*(keyi+1) == *(keyarr+1)) && (*(keyi+2) == *(keyarr+2)))
 	          {
 	    		  p->next = *(bucket_vec[entry].begin()+i);
@@ -490,8 +468,8 @@ THashEntryPtr THashTable::addElement (int entry, unsigned keyi[])
 	      }//end of for
 
 	      //if keyi larger than maximum key in the vector, put it at the end of the vector
-	      p->pre = *(bucket_vec[entry].end()-1);
-	      (*(bucket_vec[entry].end()-1))->next = p;
+	      p->pre = (bucket_vec[entry][size-1]);
+	      (bucket_vec[entry][size-1])->next = p;
 	      bucket_vec[entry].push_back(p);
 		  return p;
 	  }// end else -->when vector size is smaller than HASHTABLE_LOOKUP_LINSEARCH
@@ -499,56 +477,6 @@ THashEntryPtr THashTable::addElement (int entry, unsigned keyi[])
 
 }
 
-//
-//THashEntryPtr THashTable::addElement (int entry, unsigned key[])
-//{
-//  THashEntryPtr
-//    p = new THashEntry (key);
-//
-//  if ((bucket[entry]))          //this place is already occupied
-//  {
-//    THashEntryPtr
-//      currentPtr = bucket[entry];
-//
-//    while (currentPtr != 0 && (key[0] > currentPtr->key[0]))
-//    {
-//      p->pre = currentPtr;
-//      currentPtr = currentPtr->next;
-//    }
-//
-//    if (currentPtr != 0 && key[0] == currentPtr->key[0])
-//    {
-//      while (currentPtr != 0 && (key[1] > currentPtr->key[1]))
-//      {
-//        p->pre = currentPtr;
-//        currentPtr = currentPtr->next;
-//      }
-//    }
-//
-//    if (currentPtr != 0 && key[0] == currentPtr->key[0] && key[1] == currentPtr->key[1])
-//    {
-//      while (currentPtr != 0 && (key[2] > currentPtr->key[2]))
-//      {
-//        p->pre = currentPtr;
-//        currentPtr = currentPtr->next;
-//      }
-//    }
-//
-//    if (currentPtr)
-//      currentPtr->pre = p;
-//    p->next = currentPtr;
-//    currentPtr = p->pre;
-//    if (currentPtr)
-//      currentPtr->next = p;
-//    else
-//      bucket[entry] = p;//if previous previous does not exist, that means this should be the first element in the hash table
-//  }
-//
-//  //  p->next = *(bucket+entry);        //add the bucket to the head
-//  else
-//    bucket[entry] = p;          //else eliminate it
-//  return p;
-//}
 
 void *
 THashTable::lookup (unsigned * key)
@@ -587,6 +515,11 @@ THashTable::add (unsigned *key, void *value)
     p = addElement (entry, key);
     p->value = value;
   }
+  else
+  {
+	 cout << "Try to add the same particle twice, exit ..." <<endl;
+	 exit(2);
+  }
   return;
 }
 
@@ -599,15 +532,28 @@ THashTable::remove (unsigned *key)
 
   if (p == NULL)
     return;
-  if ( i == 0)
+  if ( !(p->pre))//the first element
   {
-	  bucket_vec[entry].erase(bucket_vec[entry].begin());
-      delete p;
+	  if (!(p->next))//also the last element--->only one element in vector
+	  {
+	    delete p;
+	    bucket_vec[entry].erase(bucket_vec[entry].begin());
+//	    bucket_vec[entry].clear();
+	    bucket_vec[entry].push_back(NULL);
+	  }
+	  else
+	  {
+	    (p->next)->pre = NULL;
+	    bucket_vec[entry].erase(bucket_vec[entry].begin());
+        delete p;
+	  }
+
   }
   else
   {
-    if (!(p->next))
+    if (!(p->next))//The last element
     {
+      (p->pre)->next = NULL;
       delete p;
       bucket_vec[entry].erase(bucket_vec[entry].begin()+i);
     }
@@ -620,6 +566,7 @@ THashTable::remove (unsigned *key)
       delete p;
     }
   }
+
 }
 
 int THashTable::hash (unsigned * key)
@@ -645,11 +592,13 @@ THTIterator::THTIterator (THashTable * ht)
 
 THashEntryPtr THTIterator::getNextBucket ()
 {
-  while (table->IsBucketEmpty(++index) && index < size);
-  if (index == size)
-    return NULL;
+  index++;
+  while (index < size && table->IsBucketEmpty(index++));
+	 if (index == size)
+         return NULL;
 
-  return table->getBucket (index);
+  return table->getBucket (--index);
+//	  return table->getBucket (index);
 }
 
 void *

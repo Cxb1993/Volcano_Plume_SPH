@@ -9,7 +9,9 @@ noinst_LIBRARIES = libdebug.a
 libdebug_a_SOURCES = \
             debug_header.h \
             particle_deb.cc \
-            debug_lib.cc 
+            debug_lib.cc  \
+            hashtb_debug.cc
+            
 
 libdebug_a_CPPFLAGS = -I$(top_srcdir)/datstr \
                       -I$(top_srcdir)/src \

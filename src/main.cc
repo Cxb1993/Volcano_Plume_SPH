@@ -78,10 +78,6 @@ main(int argc, char **argv)
   bool debug_hash_tb = true;
 #endif
 
-#ifdef DEBUG
-  debug_thash_tab();
-#endif
-
   // allocate communcation array
   int * my_comm = new int [numprocs];
 
@@ -99,6 +95,11 @@ main(int argc, char **argv)
     cerr << "ERROR: Can't read Initial grid\n";
     exit(1);
   }
+
+#ifdef DEBUG
+  if (debug_hash_tb)
+    hashtb_debug(matprops, myid, timeprops);
+#endif
 
   //add air particles and put particles into bucket, bc_type is determined in this process
   add_air (P_table, BG_mesh, matprops, numprocs, myid);

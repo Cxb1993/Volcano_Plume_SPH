@@ -135,6 +135,7 @@ struct THashEntry
     int i;
     for (i = 0; i < TKEYLENGTH; i++)
         key[i] = keyi[i];
+      value = NULL;
       next = NULL;
       pre = NULL;
   }
@@ -183,7 +184,7 @@ protected:
 
 public:
   THashTable (int,  int, double *, double *); //constructor that I will use.
-  THashTable (int,  int, double *, double *, int); //overloading constructor with maximum number of material adding included.
+//  THashTable (int,  int, double *, double *, int); //overloading constructor with maximum number of material adding included.
   ~THashTable ();
 
   void add (unsigned * key, void * value);
@@ -223,7 +224,7 @@ public:
   //! is i-th bucket empty?
   bool IsBucketEmpty (int entry)
   {
-    return bucket_vec[entry].empty();
+    return !*(bucket_vec[entry].begin());
   }
 
   /*
@@ -265,7 +266,8 @@ private:
 public:
    ~THTIterator ()
   {
-  };
+	   ;
+  }
 
   THTIterator (THashTable * ht);
   THashEntryPtr getNextBucket ();
@@ -274,7 +276,7 @@ public:
   {
     current = table->getBucket (0);
     index = 0;
-  };
+  }
 };
 
 #endif /* THASHTAB_H_ */

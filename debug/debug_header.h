@@ -169,4 +169,13 @@ void check_neigh_part(
 		);
 
 
+/*
+ * function for new hashtable debug
+ */
+void hashtb_debug(
+		MatProps* ,//matprops,
+		int ,//myid,
+		TimeProps* //timeprops
+		);
+
 #endif /* DEBUG_HEADER_H */

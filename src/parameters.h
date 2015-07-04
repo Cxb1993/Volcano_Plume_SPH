@@ -18,7 +18,7 @@
 
 const double Lx_P[2]={-5500,5500};
 const double Ly_P[2]={-5500,5500};
-const double Lz_P[2]={0, 9000};
+const double Lz_P[2]={0, 3000};
 
 const int N_total_P=2700;  // This one is actually not used in current code!
 
