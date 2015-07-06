@@ -259,7 +259,7 @@ main(int argc, char **argv)
     adapt = 0; // and adapt flag
 
     // search and update neighbors
-    search_neighs_const (myid, P_table, BG_mesh);
+    search_neighs_consth (myid, P_table, BG_mesh);
 #ifdef DEBUG
   if (check_neigh)
 	  // check neighbors of particle for different phases

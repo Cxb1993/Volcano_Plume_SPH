@@ -101,7 +101,7 @@ Read_Grid (THashTable ** P_table, HashTable ** BG_mesh,
 {
   int No_of_Buckets;
   int BG_TABLE_SIZE = 100000;
-  int P_TABLE_SIZE = 1000000;
+  int P_TABLE_SIZE = 400000;
   double mindom[DIMENSION], maxdom[DIMENSION];
   unsigned btkey[KEYLENGTH];
   Key tempbtkey;
