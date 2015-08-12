@@ -1,8 +1,9 @@
 #!/bin/bash
-#SBATCH --time=71:20:00
-#SBATCH --nodes=16
+#SBATCH --time=71:30:00
+#SBATCH --nodes=32
 #SBATCH --cpus-per-task=1
 #SBATCH --tasks-per-node=1
+#SBATCH --mem=12000
 #SBATCH --mail-user=zhixuanc@buffalo.edu
 #SBATCH --mail-type=ALL
 #SBATCH --job-name=fine_resolution
@@ -118,7 +119,7 @@ start_coordinator()
 
 echo "Launching dmtcp coordintor daemon"
 echo "start_coordinator --exit-after-ckpt"
-start_coordinator #--exit-after-ckpt
+start_coordinator --exit-after-ckpt
 
 # convert checkpoint time to seconds
 nTics=`echo $CHECKPOINT_TIME | \
