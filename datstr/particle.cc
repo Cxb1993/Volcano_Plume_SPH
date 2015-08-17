@@ -12,6 +12,10 @@ using namespace std;
 #include "particle.h"
 #include "constant.h"
 
+#ifdef DEBUG
+#  include <debug_header.h>
+#endif
+
 // constructor for initial air
 Particle::Particle (unsigned *keyin, double *crd, double m, double h, double prss, double masfrc, double gmm, double sndspd, int phs_num, int id, int bc)
 {
@@ -135,6 +139,9 @@ bool Particle::operator== (const Particle & rhs) const
 //member function that used to update second variables based on give primitive variables.
 void Particle::update_second_var(double ng0_P, double Cvs_P, double Cvg_P, double Cva_P, double Rg_P, double Ra_P)
 {
+#ifdef DEBUG
+    bool do_check = true;
+#endif
 	//desm should be density of mixture of erupt material and air
 	double desm = state_vars[0];
 	double engr = state_vars[NO_OF_EQNS-1];
@@ -162,6 +169,19 @@ void Particle::update_second_var(double ng0_P, double Cvs_P, double Cvg_P, doubl
 	double engrg=engr*Cvmg/Cvm;
 
 	sndspd=pow((Rm*(press/desmg+engrg)/Cvmg),0.5);  //sound speed is assumed to be only depends on gas phase.
+
+#ifdef DEBUG
+    if (do_check)
+    	if (!(sndspd>0))
+    	{
+    		cout << "negative sound speed!"<< endl;
+    		cout << "press="<< press <<endl;
+    		cout << "desmg="<< desmg <<endl;
+    		cout << "engrg="<< engrg <<endl;
+    		cout << "Cvmg="<< Cvmg <<endl;
+    		cout << "Rm="<< Rm <<endl;
+    	}
+#endif
 
 	pressure = press ;
 	sound_speed = sndspd ;
