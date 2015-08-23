@@ -140,7 +140,7 @@ bool Particle::operator== (const Particle & rhs) const
 void Particle::update_second_var(double ng0_P, double Cvs_P, double Cvg_P, double Cva_P, double Rg_P, double Ra_P)
 {
 #ifdef DEBUG
-    bool do_check = true;
+    bool do_check = false;
 #endif
 	//desm should be density of mixture of erupt material and air
 	double desm = state_vars[0];
