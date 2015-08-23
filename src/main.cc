@@ -129,7 +129,7 @@ main(int argc, char **argv)
 #endif
 
   // search and update neighbors
-  search_neighs (myid, P_table, BG_mesh);
+  search_neighs_consth (myid, P_table, BG_mesh);
 
   //initialized the mass of all particles
   setup_ini(myid,  P_table,  BG_mesh, timeprops, numprocs, my_comm);
@@ -174,7 +174,7 @@ main(int argc, char **argv)
 #endif
 
   // search and update neighbors ---> can I use a send neighbor here? --> not, I do not think it is necessary!
-  search_neighs (myid, P_table, BG_mesh);
+  search_neighs_consth (myid, P_table, BG_mesh);
 
 #ifdef DEBUG
   if (check_neigh)
@@ -253,7 +253,7 @@ main(int argc, char **argv)
     adapt = 0; // and adapt flag
 
     // search and update neighbors
-    search_neighs (myid, P_table, BG_mesh);
+    search_neighs_consth (myid, P_table, BG_mesh);
 #ifdef DEBUG
   if (check_neigh)
 	  // check neighbors of particle for different phases
@@ -353,7 +353,6 @@ main(int argc, char **argv)
     if (timeprops->ifoutput())
       write_output (myid, numprocs, P_table, BG_mesh,
                     partition_table, timeprops, format);
-
   }
 
 #ifdef MULTI_PROC

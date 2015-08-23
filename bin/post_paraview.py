@@ -2,9 +2,15 @@
 from paraview.simple import *
 #### disable automatic camera reset on 'Show'
 paraview.simple._DisableFirstRenderCameraReset()
+<<<<<<< HEAD
 total_proc=2
 maindirectory='/eng/home/zhixuanc/Desktop/rohit-zhixuanc/Documents/C_plusplus/Resutls/'
 subdirectory='ccr/comp_erupt/sym_200/'
+=======
+total_proc=16
+maindirectory='/eng/home/zhixuanc/Desktop/rohit-zhixuanc/Documents/C_plusplus/Resutls/'
+subdirectory='ccr/smaller_sml/'
+>>>>>>> eruptbc
 Disp={}
 Plot={}
 for i in range(total_proc):
@@ -53,7 +59,11 @@ for i in range(total_proc):
    renderView1.ResetCamera()
 
    # show color bar/color legend
+<<<<<<< HEAD
    Disp[displayname].SetScalarBarVisibility(renderView1, True)
+=======
+   #Disp[displayname].SetScalarBarVisibility(renderView1, True)
+>>>>>>> eruptbc
 
    # set scalar coloring
    ColorBy(Disp[displayname], ('POINTS', 'mssfrc'))

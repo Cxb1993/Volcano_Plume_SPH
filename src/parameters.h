@@ -66,7 +66,7 @@ const double Mv_P=3.9811e+07;  /*mass flow rate, it is not directly used in simu
 
 const double rv_P= pow ((Mv_P/(rhov_P*Vv0_P*3.1415926)),0.5); /*radius of vent*/
 
-const double Pos_v_P={0};  /*position of vent at the origin*/
+const double Pos_v_P[DIMENSION]={0., 0., 0. };  /*position of vent at the origin*/
 
 const int num_erupt = 2; /*this parameter should be used to determine total number */
 
@@ -80,8 +80,10 @@ const double beta_P=2.;
 const double ata_P = 0.01;
 //----------------------------------------------------------------------------------------
 // for variable smooth length
-const int num_loop_P=5;
+const int num_loop_P=2;
 const double thresh_P=1e-5;
+const double C_smooth_P = 2.0;
+const double eta_smooth_P = 1.2;
 
 //----------------------------------------------------------------------------------------
 //CFL coefficient for time step update

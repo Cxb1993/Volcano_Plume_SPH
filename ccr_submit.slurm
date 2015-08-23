@@ -12,7 +12,6 @@
 #SBATCH --requeue 
 #SBATCH --job-name="sml130" 
 #SBATCH --output=sml130.out
-#SBATCH --error=sml130.err
 #
 echo "SLURM_JOBID="$SLURM_JOBID 
 echo "SLURM_JOB_NODELIST"=$SLURM_JOB_NODELIST 
@@ -24,9 +23,6 @@ module load intel-mpi/5.0.2
 module load mkl/11.2
 module load hdf
 module list
-
-#because CCR is not finish updating yet, I need the following line to make the excutable file works properly.
-export HDF5_DISABLE_VERSION_CHECK=1
 
 #echo "Run with 32 threads."
 #mpirun -n 32 ./my_4000 > only_mpi_slurm.txt

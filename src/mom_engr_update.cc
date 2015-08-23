@@ -42,7 +42,7 @@ mom_engr_update(int myid, THashTable * P_table, HashTable * BG_mesh,
   Particle *pi=NULL;
 
   // three point gauss-quadrature points
-  double gravity[3] = { 0., 0., -9.81};
+  double gravity[3] = { 0., 0., -g_P};
 
   // time-step
   double dt = timeprops->dtime;
@@ -207,7 +207,8 @@ mom_engr_update(int myid, THashTable * P_table, HashTable * BG_mesh,
 		   unew[3] = uvec[3] + dt * (rhs_v[2] + gravity[2]);
 
 		   // energy
-		   unew[4] = uvec[4] + dt * (rhs_e + veli[2] * gravity[2]);
+//		   unew[4] = uvec[4] + dt * (rhs_e + veli[2] * gravity[2]); //the variable is only internal energy, it has nnothing to do with mechanical energy, so gravity should not appear here!
+		   unew[4] = uvec[4] + dt * rhs_e;
 
 		   pi->put_new_state_vars(unew);
 	  }
